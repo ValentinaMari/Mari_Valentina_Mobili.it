@@ -2,5 +2,8 @@
 
 .header{
 
-    height: 300px;
+   
+    background: url(/public/img/spacejoy-c0JoR_-2x3E-unsplash.jpg);
+    background-size: cover;
+    background-position: center;
 }

@@ -8,6 +8,17 @@
         </div>
     </div>
 
+     @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+     @endif
+
+
 
 
     <div class="container ">
@@ -17,7 +28,10 @@
                     @csrf
                     <div class="mb-3">
                       <label for="email" class="form-label">Email:</label>
-                      <input type="email" name='email' class="form-control" id="email" >
+                      <input type="email" name='email' class="form-control @error('email') is-invalid @enderror" id="email" >
+                      @error('email')
+                              <div class="text-danger">*{{ $message }}</div>
+                      @enderror
                     </div>
                     <div class="mb-3">
                         <label for="name" class="form-label">Nome:</label>
