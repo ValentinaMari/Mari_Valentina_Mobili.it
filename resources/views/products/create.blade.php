@@ -10,7 +10,7 @@
 
     @if (session('message'))
     <div class="alert alert-success">
-        {{ session('status') }}
+      {{ session('message') }}
     </div>
     @endif
 
@@ -44,7 +44,7 @@
                       <select class="form-select" name="category" aria-label="Default select example">
                         <option selected>Open this select menu</option>
                         @foreach ($categories as $category)
-                        <option value="{{$category->id}}">{{$category->title}} </option>
+                        <option class="text-danger" value="{{$category->id}}">{{$category->name}} </option>
                         @endforeach
                         </select>
                     </div>
@@ -57,6 +57,20 @@
                         <label for="img" class="form-label">Immagine dell'articolo:</label>
                         <input type="file" name="img"class="form-control" id="img">
                       </div>
+
+                       <div class="mb-3">
+
+                        @foreach($tags as $tag)
+                      <div class="form-check">
+                        <input  class="form-check-input" type="checkbox" name="tags[]" value="{{$tag->id}}" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                          {{$tag->name}}
+                        </label>
+
+                      </div> 
+                      @endforeach
+                    </div>
+
                     <button type="submit" class="btn btn-primary">Carica il tuo prodotto</button>
                   </form>
             </div>

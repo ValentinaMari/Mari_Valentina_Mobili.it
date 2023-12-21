@@ -12,6 +12,13 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{{route('products.index')}}">Tutti i nostri articoli</a>
           </li>
+        
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{route('products.index')}}">Categorie</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{route('mail.contactUs')}}">Contattaci</a>
+          </li>
           @guest
           <li class="nav-item">
             <a class="nav-link" href="{{route('login')}}">Login</a>
@@ -31,7 +38,7 @@
             </a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{{route('products.create')}}">Insierisci nuovi articoli</a></li>
-              <li><form action="{{route('logout')}}" method="post">
+              <li><form action="{{route('logout')}}" method="POST">
                 @csrf
                 <button class="dropdown-item" type="submit">Logout</button>
                 </form></li>

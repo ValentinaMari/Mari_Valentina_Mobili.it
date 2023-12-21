@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tag;
 use App\Models\Product;
 use App\Models\Category;
+use App\Mail\ContactMail;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\ProductController;
 use App\Http\Requests\ProductCreateRequest;
 
 class ProductController extends Controller
@@ -40,37 +45,41 @@ class ProductController extends Controller
     public function create()
     {
 
+        
+
         $categories = Category::all();
+        $tags = tag::all();
      
-        return view('products.create', compact('categories'));
+        return view('products.create', compact('categories', 'tags'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductCreateRequest $request)
-    {
-        
-     $product = Product::create([
+  
+     public function store(ProductCreateRequest $request)
+{
+    $product = Product::create([
         'name' => $request->name,
         'price' => $request->price,
         'description' => $request->description,
         'img' => $request->file('img')->store('public/images'),
         'user_id' => Auth::id(),
-        'category_id' => $request->category
+       'category_id'=>$request->category
+    ]);
+    
+    $product->tags()->attach($request->tags);
 
-     ]);
+    return redirect()->route('products.create')->with('message', 'Hai inserito correttamente il tuo articolo');
+}
 
-     return redirect(route('products.create'))->with('message','Hai inserito correttamente il tuo artcolo');
-
-    }
 
     /**
      * Display the specified resource.
      */
     public function show(Product $product)
     {
-        //
+    return view('products.show', compact('product'));
     }
 
     /**
@@ -79,8 +88,9 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
       $categories = Category::all();
+      $tags = Tag::all();
 
-        return view('products.edit',compact('product', 'categories'));
+        return view('products.edit',compact('product', 'categories','tags'));
     }
 
     /**
@@ -109,7 +119,8 @@ class ProductController extends Controller
     
          ]);
     
-         return redirect(route('products.index'))->with('message', 'Hai modificato il tuo artcolo');
+         $product->tags()->sync($request->tags);
+         return redirect(route('products.index'))->with('message', 'Hai modificato il tuo articolo');
 
 
     }
@@ -119,8 +130,32 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        
+       if($product->tags){
+        $product->tags()->detach($product->tags);
+
+       }
         $product->delete();
 
         return redirect(route('homepage'))->with('message','Hai cancellato il tuo articolo');
     }
+
+    public function contactUs(){
+        
+        return view('contactUs');
+   }
+
+  
+   public function submit(Request $request){
+
+   $email = $request->input('email');
+   $username = $request->input('username');
+   $description =$request->input('description');
+
+        Mail::to('hack99@email.it')->send(new ContactMail($email, $username, $description));
+
+    return redirect(route('homepage'));
+}
+
+   
 }

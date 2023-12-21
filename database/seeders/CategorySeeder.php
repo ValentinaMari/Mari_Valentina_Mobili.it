@@ -13,11 +13,11 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        $categories = ['Divani','Sedie','Tavolo','Illuminazione','Complementi'];
+        $categories =['divano','sedia','illuminazione','complementi'];
 
         foreach ($categories as $category) {
             Category::create([
-                'title' => $category
+                'name' => $category
 
             ]); 
         }

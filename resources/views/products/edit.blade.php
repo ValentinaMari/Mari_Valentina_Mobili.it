@@ -9,71 +9,80 @@
     </div>
 
     @if (session('message'))
-    <div class="alert alert-success">
-        {{ session('status') }}
-    </div>
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
     @endif
 
 
     @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-     @endif
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
 
     <div class="container ">
         <div class="row justify-content-center my-5">
             <div class="col-12 col-md-4 d-flex justify-content-center ">
                 <form class="shadow border-4 rounded-3 w-100 p-3 mt-5"
-                 action="{{route('products.update', compact('product'))}}" 
-                 method="POST"
-                 enctype='multipart/form-data'>
+                    action="{{ route('products.update', compact('product')) }}" method="POST"
+                    enctype='multipart/form-data'>
                     @method('PUT')
                     @csrf
                     <div class="mb-3">
-                      <label for="name" class="form-label">Nome Articolo:</label>
-                      <input type="text" name="name" value="{{$product->name}}" class="form-control" id="name" >
+                        <label for="name" class="form-label">Nome Articolo:</label>
+                        <input type="text" name="name" value="{{ $product->name }}" class="form-control"
+                            id="name">
                     </div>
                     <div class="mb-3">
                         <label for="price" class="form-label">Prezzo:</label>
-                    
-                        <input type="number" step="0.5" value="{{$product->price}}" name='price' class="form-control" id="price" >
-                      </div>
-                      <div class="mb-3">
-                      <select class="form-select" name="category" aria-label="Default select example">
-                        <option >Open this select menu</option>
-                        @foreach ($categories as $category)
-                        <option 
-                        
-                        @if($product->category ==$category) selected @endif 
-                            
-                            value="{{$category->id}}">{{$category->title}} </option>
-                        @endforeach
+
+                        <input type="number" step="0.5" value="{{ $product->price }}" name='price'
+                            class="form-control" id="price">
+                    </div>
+                    <div class="mb-3">
+                        <select class="form-select" name="category" aria-label="Default select example">
+                            <option value="">Open this select menu</option>
+                            @foreach ($categories as $category)
+                                <option @if ($product->category == $category) selected @endif value="{{ $category->id }}">
+                                    {{ $category->name }} </option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="mb-3">
-                      <label for="description" class="form-label">Description:</label>
-                      <textarea name="description" class="form-control" id="description" cols="30" rows="10">{{$product->name}}</textarea>
+                        <label for="description" class="form-label">Description:</label>
+                        <textarea name="description" class="form-control" id="description" cols="30" rows="10">{{ $product->name }}</textarea>
                     </div>
                     <div class="mb-3">
                         <label for="img" class="form-label">Immagine attuale:</label>
-                    <img src="{{Storage::url($product->img)}}" height="200" alt="">
-                      </div>
+                        <img src="{{ Storage::url($product->img) }}" height="200" alt="">
+                    </div>
                     <div class="mb-3">
                         <label for="img" class="form-label">Immagine dell'articolo:</label>
                         <input type="file" name="img"class="form-control" id="img">
-                      </div>
+                    </div>
+                    @foreach ($tags as $tag)
+                        <div class="form-check">
+                            <input @if ($product->tags->contains($tag)) checked @endif class="form-check-input"
+                                type="checkbox" name="tags[]" value="{{ $category->id }}"
+                                id="{{ 'flexCheckDefault' . $tag->id }}">
+                            <label class="form-check-label" for="{{ 'flexCheckDefault' . $tag->id }}">
+                                {{ $tag->name }}
+                            </label>
+
+                        </div>
+                    @endforeach
                     <button type="submit" class="btn btn-primary">Carica il tuo prodotto</button>
-                  </form>
+                </form>
             </div>
         </div>
     </div>
 
-  
+
 
 </x-layout>
